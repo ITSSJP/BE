@@ -59,7 +59,7 @@ php artisan key:generate
 ```
 
 ##### 3. Go to website in browser by url bellow:  
-# If not using Docker
+# If using Docker
 [localhost:8080](http://localhost:8080/)
 
 # If not using Docker
