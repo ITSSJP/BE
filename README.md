@@ -51,7 +51,7 @@ cp .env.example .env
 
 # Edit .env data
 
-# Run composer inside docker container
+# Run composer
 composer install
 
 # Generate key
@@ -59,6 +59,7 @@ php artisan key:generate
 ```
 
 ##### 3. Go to website in browser by url bellow:  
+```
 # If using Docker
 [localhost:8080](http://localhost:8080/)
 
