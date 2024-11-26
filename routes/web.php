@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClassroomController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +15,4 @@ use App\Http\Controllers\ClassroomController;
 Route::get('/', function () {
     return view('welcome');
 });
-// Route API để tạo lớp học
-Route::post('/classrooms', [ClassroomController::class, 'createClassroom']);
-
-// Route API để thêm sinh viên vào lớp học
-Route::post('/classrooms/{roomId}/students', [ClassroomController::class, 'addStudentToClassroom']);
 
