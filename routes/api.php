@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('rooms', [RoomController::class, 'createRoom']); // Tạo lớp học
-Route::post('rooms/{roomId}/students', [RoomController::class, 'addStudentToRoom']); // Thêm học sinh vào lớp học
+Route::post('rooms', [RoomController::class, 'createRoom']); // API tạo lớp học
+Route::post('rooms/{roomId}/students', [RoomController::class, 'addStudentToRoom']); // API thêm học sinh vào lớp học
