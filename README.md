@@ -27,6 +27,9 @@ docker exec -it itss-be-app bash
 # Run composer inside docker container
 composer install
 
+# Update Composer
+composer update
+
 # Generate key
 php artisan key:generate
 
@@ -53,6 +56,9 @@ cp .env.example .env
 
 # Run composer
 composer install
+
+# Update Composer
+composer update
 
 # Generate key
 php artisan key:generate
