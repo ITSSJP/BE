@@ -22,4 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+Route::post('/password/forgot', [AuthController::class, 'forgotPassword'])->name('password.email');
+
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
+
 Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'user']);
