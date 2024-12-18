@@ -26,3 +26,6 @@ Route::post('rooms/{roomId}/students', [RoomController::class, 'addStudentToRoom
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'user']);
+Route::delete('rooms/{roomId}/students', [RoomController::class, 'removeStudentFromRoom']); // Xóa người dùng khỏi lớp học
+Route::put('rooms/{roomId}', [RoomController::class, 'updateRoomName']); // Thay đổi tên phòng học
+Route::delete('rooms/{roomId}', [RoomController::class, 'deleteRoom']); // Hủy phòng học
