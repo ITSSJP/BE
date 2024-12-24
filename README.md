@@ -72,3 +72,12 @@ php artisan key:generate
 # If not using Docker
 localhost:8000
 
+### Toastr Notifications
+```
+# Install
+composer require yoeunes/toastr
+
+# After installation, publish the assets using:
+php artisan flasher:install
+
+```

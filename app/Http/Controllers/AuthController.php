@@ -67,4 +67,7 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+    public  function showProfile(){
+        return view('content.account.profile');
+    }
 }

@@ -21,8 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
-
+    const TEACHER = '1';
+    const STUDENT = '0';
+    protected $listRole=[
+        self::TEACHER => "Giáo viên",
+        self::STUDENT => "Học sinh",
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -41,4 +47,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function ownedRooms()
+    {
+        return $this->hasMany(Room::class, 'owner_id');
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'room_members', 'member_id', 'room_id');
+    }
 }
