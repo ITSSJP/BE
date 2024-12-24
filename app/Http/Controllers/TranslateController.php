@@ -7,19 +7,27 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class TranslateController extends Controller
 {
+    public function index(){
+        return view('content.translate.index');
+    }
     public function translate(Request $request)
     {
-        // Xác thực input
+        // Validate input
         $validated = $request->validate([
-            'text' => 'required|string', // Chuỗi cần dịch
+            'text' => 'required|string',  // Text to be translated
+            'from' => 'required|string', // Source language
+            'to' => 'required|string',   // Target language
         ]);
 
         $text = $validated['text'];
+        $fromLang = $validated['from'];
+        $toLang = $validated['to'];
 
         try {
-            // Sử dụng Google Translate API
-            $translator = new GoogleTranslate('ja'); // Ngôn ngữ đích: Nhật
-            $translator->setSource('vi');           // Ngôn ngữ nguồn: Việt
+            // Use Google Translate API
+            $translator = new GoogleTranslate();
+            $translator->setSource($fromLang);  // Source language
+            $translator->setTarget($toLang);   // Target language
 
             $translatedText = $translator->translate($text);
 
