@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,4 @@ Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'user']);
 Route::delete('rooms/{roomId}/students', [RoomController::class, 'removeStudentFromRoom']); // Xóa người dùng khỏi lớp học
 Route::put('rooms/{roomId}', [RoomController::class, 'updateRoomName']); // Thay đổi tên phòng học
 Route::delete('rooms/{roomId}', [RoomController::class, 'deleteRoom']); // Hủy phòng học
+Route::post('create-test', [TestController::class, 'createTest']); // API tạo bài test

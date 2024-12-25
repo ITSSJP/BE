@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -38,33 +39,40 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * Hàm đăng nhập
+     * input: email, password
+     * output: token đăng nhập nếu thành công, lỗi nếu không thành công
+     */
+
     public function login(Request $request)
     {
+        // Xác thực dữ liệu đầu vào
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
+            'email' => 'required|email|exists:users,email',  // Kiểm tra email có tồn tại trong bảng users
+            'password' => 'required|string|min:6',  // Kiểm tra mật khẩu có tồn tại và độ dài ít nhất 6 ký tự
         ]);
-
+    
         if ($validator->fails()) {
-            throw new ValidationException($validator);
+            return response()->json($validator->errors(), 400);  // Trả lại lỗi nếu dữ liệu không hợp lệ
         }
-
+    
+        // Lấy thông tin người dùng từ email
         $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+    
+        // Kiểm tra nếu người dùng tồn tại và mật khẩu đúng
+        if ($user && $user->password === $request->password) {
+            // Tạo token cho người dùng khi đăng nhập thành công
+            $token = $user->createToken('MyApp')->plainTextToken;
+    
+            return response()->json([
+                'message' => 'Đăng nhập thành công',
+                'token' => $token,
+                'user' => $user
+            ], 200);
         }
-
-        $token = $user->createToken('YourAppName')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Login successful.',
-            'token' => $token,
-        ]);
+    
+        return response()->json(['message' => 'Email hoặc mật khẩu không chính xác'], 401);  // Nếu đăng nhập thất bại
     }
-
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
-    }
+    
 }
