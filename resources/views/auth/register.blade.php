@@ -41,6 +41,19 @@
                 @enderror
             </div>
 
+            <div class="mb-4">
+                <select class="form-control @error('role') is-invalid @enderror" id="role" name="role" required>
+                    <option>Bạn là?</option>
+                    <option value="{{\App\Models\User::TEACHER}}">Giáo viên</option>
+                    <option value="{{\App\Models\User::STUDENT}}">Học sinh/Sinh viên</option>
+                </select>
+                @error('role')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+
             <button type="submit" class="btn btn-custom btn-lg w-100">Register</button>
         </form>
         <p class="mt-4 mb-0">Already have an account? <a href="{{route('login')}}" class="text-white fw-bold">Login</a></p>

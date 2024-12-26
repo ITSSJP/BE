@@ -185,7 +185,7 @@
         @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Models\User::TEACHER)
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="mb-0">👥 Danh sách bài học</h3>
-                <button id="add-lesson-btn" class="btn btn-primary btn-sm">
+                <button id="add-lesson-btn" class="btn btn-primary btn-sm" onclick="location.href=`{{route('lesson.create',['id'=>$room->id])}}`;">
                     ➕ Thêm Bài Học
                 </button>
             </div>
@@ -203,9 +203,22 @@
         <!-- Header với nút Thêm Thành Viên -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="mb-0">👥 Thành Viên Nhóm</h3>
+            @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Models\User::TEACHER)
             <button id="add-member-btn" class="btn btn-primary btn-sm">
                 ➕ Thêm Thành Viên
             </button>
+            @endif
+        </div>
+        <div id="add-member-form" class="mt-3" style="display: none;">
+            <div class="form-group">
+                <label for="member-name">Tên Thành Viên</label>
+                <input type="text" id="member-name" class="form-control" placeholder="Nhập tên thành viên" name="user_name"  autocomplete="off">
+                <ul id="search-results" class="list-group mt-2 shadow-lg" style="display: none;"></ul>
+                <input type="hidden" id="hidden-user-id" name="student_id">
+
+            </div>
+            <button id="confirm-add-btn" class="btn btn-success btn-sm mt-2">✅ Xác Nhận</button>
+            <button id="cancel-add-btn" class="btn btn-secondary btn-sm mt-2">❌ Hủy</button>
         </div>
 
         <!-- Tổng số lượng thành viên -->
@@ -224,40 +237,51 @@
             </tbody>
         </table>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
     <!-- xử lý logic cho bài ọc và thành viên -->
     <script>
-        const lessons = [
-            { id: 1, title: "Bài học 1" },
-            { id: 2, title: "Bài học 2" },
-            { id: 3, title: "Bài học 3" }
-        ];
 
-        const members = [
-            { id: 1, name: "Nguyễn Văn A", username: "nguyenvana123" },
-            { id: 2, name: "Trần Thị B", username: "tranthib456" },
-            { id: 3, name: "Lê Văn C", username: "levanc789" }
-        ];
+        $(document).ready(function () {
+            $.ajax({
+                url: `{{route('lesson.list',['id'=>$room->id])}}`, // URL API
+                type: 'GET',
+                success: function (response) {
+                    const lessons = response.data.map(lessons => ({
+                        id: lessons.id,
+                        title: lessons.title,
+                    }));
+                    const lessonContainer = document.querySelector("#lesson-list ul");
+                    lessonContainer.innerHTML = lessons
+                        .map((lesson) => `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      ${lesson.title}
+                      <button class="btn btn-primary btn-sm" onclick="startLesson(${lesson.id})">Vào học</button>
+                    </li>
+                  `)
+                                    .join("");
+                },
+                error: function (xhr, status, error) {
+                    console.error('Lỗi khi lấy danh sách thành viên:', error);
+                }
+            });
+            // Gọi API để lấy danh sách thành viên
+            $.ajax({
+                url: `{{route('getMember',['id'=>$room->id])}}`, // URL API
+                type: 'GET',
+                success: function (response) {
+                     const members = response.members.map(member => ({
+                        id: member.id,
+                        name: member.name,
+                        username: member.email // Thay đổi email thành username nếu cần
+                    }));
 
-        const lessonContainer = document.querySelector("#lesson-list ul");
-        lessonContainer.innerHTML = lessons
-            .map((lesson) => `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          ${lesson.title}
-          <button class="btn btn-primary btn-sm" onclick="startLesson(${lesson.id})">Vào học</button>
-        </li>
-      `)
-            .join("");
+                    const memberCount = document.querySelector("#member-count");
+                    memberCount.textContent = `Tổng số thành viên: ${members.length+1}`;
 
-        function startLesson(id) {
-            alert("Bạn đã chọn: " + lessons.find(lesson => lesson.id === id).title);
-        }
-
-        const memberCount = document.querySelector("#member-count");
-        memberCount.textContent = `Tổng số thành viên: ${members.length}`;
-
-        const memberTable = document.querySelector("#member-table");
-        memberTable.innerHTML = members
-            .map((member, index) => `
+                    const memberTable = document.querySelector("#member-table");
+                    memberTable.innerHTML = members
+                        .map((member, index) => `
         <tr>
           <td>${index + 1}</td>
           <td>${member.name}</td>
@@ -267,22 +291,189 @@
                 </td>
         </tr>
       `).join("");
-
-        const confirmDelete = (id) => {
-            const member = members.find((member) => member.id === id);
-            if (member) {
-                const confirmAction = confirm(
-                    `Bạn có muốn xóa thành viên: ${member.name} (${member.username}) không?`
-                );
-                if (confirmAction) {
-                    alert(`Thành viên ${member.name} đã bị xóa!`);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Lỗi khi lấy danh sách thành viên:', error);
                 }
-            }
-        };
+            });
+        });
 
-        // Gọi hàm render danh sách lần đầu
-        renderMemberList();
+
+        function startLesson(lessonId) {
+            const roomId = '{{ $room->id }}'; // Lấy giá trị roomId từ server-side
+            location.href = `{{ route('lesson.detail', ['id' => ':roomId', 'lessonId' => ':lessonId']) }}`
+                .replace(':roomId', roomId)
+                .replace(':lessonId', lessonId);
+        }
+
+        function confirmDelete(memberId) {
+            // Hiển thị hộp thoại xác nhận
+            if (confirm('Bạn có chắc chắn muốn xóa thành viên này khỏi phòng?')) {
+                $.ajax({
+                    url: `/room/{{$room->id}}/members/delete/${memberId}`, // URL API xóa thành viên
+                    type: 'DELETE', // Phương thức DELETE
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Nếu cần CSRF token
+                    },
+                    success: function(response) {
+                        // Thông báo thành công
+                        if (response.success) {
+                        showSuccessMessage(response.message);
+                        // Xóa thành viên khỏi giao diện
+                        $(`#room-member-${memberId}`).remove();
+                            setTimeout(function () {
+                                location.href = "{{route('room.detail',['id'=>$room->id])}}";
+                            }, 100);
+                        }
+                        else {
+                            showErrorMessage(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Xử lý lỗi
+                        if (xhr.status === 404) {
+                            alert(xhr.responseJSON.message || 'Không tìm thấy thành viên hoặc phòng.');
+                        } else {
+                            alert('Đã xảy ra lỗi, vui lòng thử lại.');
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addMemberBtn = document.getElementById("add-member-btn");
+            const addMemberForm = document.getElementById("add-member-form");
+            const confirmAddBtn = document.getElementById("confirm-add-btn");
+            const cancelAddBtn = document.getElementById("cancel-add-btn");
+            const memberNameInput = document.getElementById("member-name");
+            const memberList = document.getElementById("member-list");
+
+            // Hiển thị bảng thêm thành viên
+            addMemberBtn.addEventListener("click", () => {
+                addMemberForm.style.display = "block";
+                memberNameInput.focus();
+            });
+
+            // Xử lý thêm thành viên
+            confirmAddBtn.addEventListener("click", () => {
+                const memberName = memberNameInput.value.trim();
+                if (memberName) {
+                    // Tạo một phần tử li mới
+                    const newMember = document.createElement("li");
+                    newMember.className = "list-group-item d-flex justify-content-between align-items-center";
+                    newMember.textContent = memberName;
+
+                    // Thêm nút xóa
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "btn btn-danger btn-sm";
+                    removeBtn.textContent = "❌";
+                    removeBtn.addEventListener("click", () => {
+                        memberList.removeChild(newMember);
+                    });
+
+                    newMember.appendChild(removeBtn);
+
+                    // Thêm vào danh sách
+                    memberList.appendChild(newMember);
+
+                    // Reset form
+                    memberNameInput.value = "";
+                    addMemberForm.style.display = "none";
+                } else {
+                    alert("Vui lòng nhập tên thành viên.");
+                }
+            });
+
+            // Hủy thêm thành viên
+            cancelAddBtn.addEventListener("click", () => {
+                memberNameInput.value = "";
+                addMemberForm.style.display = "none";
+            });
+        });
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $('#member-name').on('input', function () {
+                const query = $(this).val().trim(); // Lấy giá trị input, loại bỏ khoảng trắng thừa
+
+                // Nếu input có giá trị
+                if (query.length > 0) {
+                    $.ajax({
+                        url: '{{ route('search.user') }}', // URL API Laravel
+                        type: 'GET',
+                        data: { name: query },
+                        beforeSend: function () {
+                            $('#search-results').css('display','block');
+                            $('#search-results').html('<p>Đang tìm kiếm...</p>');
+                        },
+                        success: function (response) {
+                            // Kiểm tra dữ liệu trả về
+                            if (response.data && response.data.length > 0) {
+                                // Tạo danh sách kết quả
+                                const html = response.data
+                                    .map(member => `<p class="p-2 result-item" style="cursor: pointer;" id="user-${member.id}" data-id="${member.id}">${member.name}<br><span style="color: gray;">${member.email}</span></p>`)
+                                    .join('');
+                                $('#search-results').html(html);
+                            } else {
+                                // Không có kết quả
+                                $('#search-results').html('<p>Không tìm thấy kết quả.</p>');
+                            }
+                        },
+                        error: function () {
+                            // Xử lý lỗi
+                            $('#search-results').html('<p>Đã xảy ra lỗi, vui lòng thử lại.</p>');
+                        }
+                    });
+                } else {
+                    // Nếu input trống, xóa kết quả
+                    $('#search-results').empty();
+                }
+            });
+        });
+        $(document).on('click', '.result-item', function () {
+            const userId = $(this).data('id'); // Lấy user ID từ thuộc tính data-id
+            $('#hidden-user-id').val(userId); // Gán vào ô input ẩn
+            // Gửi AJAX để thêm thành viên
+            $.ajax({
+                url: '{{ route('add.member',['id'=>$room->id]) }}', // URL API thêm thành viên
+                type: 'POST',
+                data: {
+                    student_id: userId,
+                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+                },
+                success: function (response) {
+                    showSuccessMessage(response.message);
+                    $('#search-results').empty(); // Ẩn kết quả tìm kiếm
+                    $('#search-results').css('display','none'); // Ẩn kết quả tìm kiếm
+                    $('#member-name').val(''); // Reset ô tìm kiếm
+                    updateMemberTable(response.newMember); // Cập nhật bảng thành viên
+                },
+                error: function () {
+                    showErrorMessage(response.message);
+
+                }
+            });
+        });
+        function updateMemberTable(member) {
+            const index = $('#member-table tr').length + 1;
+            const newRow = `
+            <tr>
+                <td>${index}</td>
+                <td>${member.name}</td>
+                <td>${member.email}</td>
+            </tr>
+        `;
+            $('#member-table').append(newRow);
+
+            // Cập nhật tổng số thành viên
+            const totalMembers = parseInt($('#member-count').text().replace(/\D/g, '')) + 1;
+            $('#member-count').text(`Tổng số thành viên: ${totalMembers}`);
+        }
+
+    </script>
 @endsection
 

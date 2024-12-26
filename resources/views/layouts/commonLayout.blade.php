@@ -4,12 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Improved Sidebar Menu</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Improved Sidebar Menu</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
     @vite(['resources/js/app.js'])
   <style>
@@ -217,17 +220,18 @@
         <!-- Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--              <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>--}}
+{{--            </li>--}}
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-bs-toggle="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="profileDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle" width="40" height="40" />
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
               </ul>
+
             </li>
           </ul>
         </div>
@@ -242,15 +246,31 @@
   </div>
 
   <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{asset('js/common.js')}}"></script>
   <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+  <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
   <script>
     // Toggle Sidebar for Mobile
     document.getElementById("menuToggle").addEventListener("click", function () {
       document.getElementById("sidebar").classList.toggle("active");
     });
+    function logout() {
+        $.ajax({
+            url: '{{route('logout')}}', // URL logout API
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+            },
+            success: function(response) {
+                window.location.href = '{{route('login')}}'; // Chuyển hướng đến trang đăng nhập
+            },
+            error: function(xhr) {
+                // Xử lý lỗi
+            }
+        });
+    }
 
   </script>
 
