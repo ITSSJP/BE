@@ -328,33 +328,33 @@
                 padding: 20px;
                 border-radius: 8px;
             }
-        
+
             #lesson-title, #member-title {
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             }
-        
+
             #lesson-list .list-group-item-action:hover {
                 background-color: #e9ecef;
                 transition: background-color 0.3s ease-in-out;
             }
-        
+
             #member-table {
                 border-radius: 10px;
             }
-        
+
             #member-table thead {
                 background-color: #343a40;
                 color: white;
             }
-        
+
             #member-table tbody tr:hover {
                 background-color: #f1f3f5;
             }
-        
+
             .btn-delete {
                 transition: transform 0.2s ease-in-out, box-shadow 0.3s;
             }
-        
+
             .btn-delete:hover {
                 transform: scale(1.1);
                 box-shadow: 0px 4px 6px rgba(255, 0, 0, 0.5);
@@ -366,7 +366,7 @@
                     <h3 id="lesson-title" class="mb-0">👥 Danh sách Bài Học</h3>
                     <button id="add-lesson-btn" class="btn btn-primary btn-sm" >➕ Thêm Bài Học</button>
                 </div>
-        
+
                 <ul class="list-group" id="lesson-list">
                     <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
                         Bài học 1
@@ -381,18 +381,18 @@
                         <button class="btn btn-primary btn-sm btn-lesson">Vào học</button>
                     </li>
                 </ul>
-                
+
             </div>
-        
+
             <!-- Danh sách thành viên -->
             <div id="member-section" class="mt-5">
                 <div class="d-flex justify-content-between align-items-center mb-3" id="member-header">
                     <h3 id="member-title" class="mb-0">👥 Thành Viên Nhóm</h3>
                     <button id="add-member-btn" class="btn btn-primary btn-sm" >➕ Thêm Thành Viên</button>
                 </div>
-        
+
                 <p class="fw-bold" id="member-count">Tổng số thành viên: 3</p>
-        
+
                 <table class="table table-striped table-hover table-bordered shadow" id="member-table">
                     <thead class="table-dark">
                         <tr>
@@ -431,13 +431,13 @@
                 </table>
             </div>
         </div>
-        
+
         <!-- Bootstrap -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
         />
-        
+
 
 
     </div>
@@ -447,11 +447,6 @@
         document.getElementById("menuToggle").addEventListener("click", function () {
             document.getElementById("sidebar").classList.toggle("active");
         });
-
-        function logout() {
-            alert("Logging out...");
-            window.location.href = "/auth/login";
-        }
     </script>
 
 </body>

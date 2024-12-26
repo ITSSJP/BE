@@ -19,4 +19,10 @@ class Room extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+    // Trong Room Model
+    public function roomMembers()
+    {
+        return $this->hasMany(RoomMember::class, 'room_id', 'id');
+    }
+
 }
