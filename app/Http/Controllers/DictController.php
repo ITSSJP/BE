@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class DictController extends Controller
 {
-    public function getDict():JsonResponse 
+    public function index()
     {
-        $words = DictionaryWord::paginate(20);
+        $words = DictionaryWord::paginate(20); 
+        return view('content.dictionary.index', compact('words'));
+    }
+
+    public function getRandomWords()
+    {
+        $words = DictionaryWord::inRandomOrder()->limit(5)->get();
         return response()->json($words);
     }
 
@@ -36,12 +42,8 @@ class DictController extends Controller
                 ]
                 );
         }
-        return response()->json($results);
-    }
+        $words = $results->paginate(20);
 
-    public function getRandomWords():JsonResponse
-    {
-        $words = DictionaryWord::inRandomOrder()->limit(5)->get();
-        return response()->json(data: $words);
+        return response()->json($words);
     }
 }

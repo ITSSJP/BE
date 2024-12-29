@@ -173,7 +173,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dictionary" class="sidebar-nav-link">
+          <a href="{{route('dictionary.index')}}" class="sidebar-nav-link">
             <i class="bi bi-book me-2"></i> Từ Điển
           </a>
         </li>

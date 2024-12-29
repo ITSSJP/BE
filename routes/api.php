@@ -27,8 +27,3 @@ Route::post('rooms/{roomId}/students', [RoomController::class, 'addStudentToRoom
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'user']);
-
-
-Route::get('dict', [DictController::class, 'getDict']);
-Route::get('dict/suggest', [DictController::class, 'getRandomWords']);
-Route::get('dict/search', [DictController::class, 'search']);

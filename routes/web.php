@@ -5,7 +5,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TranslateController;
+use App\Http\Controllers\DictController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,3 +52,7 @@ Route::group(['prefix'=>'room'],function() {
 });
 Route::get('/search-users', [RoomController::class, 'searchUser'])->name('search.user');
 
+
+Route::get('dict', [DictController::class, 'index'])->name('dictionary.index');  
+Route::get('dict/random', [DictController::class, 'getRandomWords']) ->name('dictionary.random');
+Route::get('dict/search', [DictController::class, 'search']) ->name('dictionary.search');

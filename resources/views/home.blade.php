@@ -122,33 +122,6 @@
             }
         }
     </style>
-
 @endsection
-@section('content')
-    <div class="card shadow-sm mt-5">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Kanji hôm nay</h5>
-        </div>
-        <div class="card-body">
-            <div class="row align-items-center">
-                <!-- Kanji chính -->
-                <div class="col-md-3 text-center">
-                    <span class="display-1 fw-bold text-danger">家</span> <!-- Kanji -->
-                </div>
-                <!-- Thông tin chi tiết -->
-                <div class="col-md-9">
-                    <p class="mb-2">
-                        <strong>Cách đọc:</strong> <span class="text-muted">いえ (ie)</span>
-                        <button class="btn btn-outline-secondary btn-sm ms-2" id="pronounce-btn"
-                                title="Nghe cách đọc">
-                            <i class="bi bi-volume-up"></i> <!-- Icon loa -->
-                        </button>
-                    </p>
-                    <p class="mb-2"><strong>Hán Việt:</strong> <span class="text-muted">Gia</span></p>
-                    <p class="mb-0"><strong>Nghĩa:</strong> <span class="text-muted">Nhà</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-@endsection
+@include('content.dictionary.random')

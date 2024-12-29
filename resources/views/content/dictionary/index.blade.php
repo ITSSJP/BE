@@ -1,212 +1,157 @@
 @extends('layouts.commonLayout')
+
 @section('styles')
     <style>
-        /* General Body */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Sidebar Styling */
-        .sidebar-container {
-            width: 270px;
-            height: 100vh;
-            position: fixed;
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: white;
-            overflow-y: auto;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .sidebar-logo-container {
-            text-align: center;
-            background-color: #1e293b;
-        }
-
-        .sidebar-logo-container img {
-            width: 100%;
-            height: 70px;
-            object-fit: contain;
-            display: block;
-        }
-
-        .sidebar-nav-group-header {
-            font-size: 0.875rem;
-            font-weight: bold;
-            padding: 0.5rem 1rem;
-            margin-top: 1rem;
-            text-transform: uppercase;
-            color: #94a3b8;
-        }
-
-        .sidebar-nav-link {
-            color: white;
-            font-size: 1rem;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease-in-out;
-            border-radius: 5px;
-            text-decoration: none; /* Bỏ gạch chân */
-
-
-        }
-
-        .sidebar-nav-link i {
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-nav-link:hover,
-        .sidebar-nav-link.active {
-            background: linear-gradient(to right, #475569, #64748b);
-            color: #f8fafc;
-            transform: translateX(5px);
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
-            text-decoration: none; /* Bỏ gạch chân */
-
-        }
-
-        .sidebar-nav-link:hover i {
-            transform: rotate(10deg);
-        }
-
-        /* Main Content Styling */
-        .main-content-container {
-            margin-left: 270px;
-            padding: 20px;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        /* Header Styling */
-        .header-navbar-brand {
-            font-weight: bold;
-        }
-
-        .header-nav-link .header-notification-indicator {
-            width: 8px;
-            height: 8px;
-        }
-
-        .card-header {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .display-1 {
-            font-size: 4rem;
-        }
-
-        .text-danger {
-            color: #dc3545 !important;
-            /* Bootstrap màu đỏ */
-        }
-
-        #pronounce-btn {
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-container {
-                transform: translateX(-100%);
-            }
-
-            .sidebar-container.active {
-                transform: translateX(0);
-            }
-
-            .main-content-container {
-                margin-left: 0;
-            }
-        }
-        .dictionary-container {
-            max-width: 1600px;
-            background: #fff;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1.2s ease-in-out;
-        }
-
-        h2 {
-            text-align: center;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            border-radius: 25px 0 0 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-        }
-
-        .btn-primary {
-            border-radius: 0 25px 25px 0;
-            background-color: #007bff;
-            border-color: #007bff;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .list-group-item {
-            background-color: #f9f9f9;
+        /* Styling for Search Bar */
+        #searchBar {
+            width: 100%; 
+            padding: 10px 0; 
             border: none;
-            border-left: 4px solid #007bff;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+            border-bottom: 1px solid gray;
+            outline: none;
+            font-size: 16px; 
+            background-color: transparent; 
+            border-radius: 0;
         }
 
-        .list-group-item:hover {
-            transform: translateX(10px);
-            background-color: #e9f5ff;
+        #searchBar:focus {
+            border-bottom: 2px solid #2D3A4D; 
         }
 
-        /* Keyframe Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Remove any focus, hover, or input effects */
+        #searchBar:focus, #searchBar:hover, #searchBar:active {
+            background-color: transparent; 
+            box-shadow: none; 
+        }
+
+        /
+        #searchBar::placeholder {
+            color: #aaa; 
+            opacity: 1;
+        }
+        /* Custom Card Styling */
+        .card {
+            border: none; /* Remove all borders */
+            border-radius: 0; /* Remove card border radius */
+            box-shadow: none; /* Remove card shadow */
+        }
+
+        .card-body {
+            padding: 20px;
+            border-bottom: 1px solid gray; /* Bottom border for both ja and vie */
+        }
+
+        .card-title {
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            padding-top: 10px;
+        }
+        .word-ja{
+            color: #ED1F26;
+        }
+
+
+        /* Custom Styling for Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+            color: #000000; /* Change the default pagination number color */
+        }
+
+        /* Active Page Styling */
+        .pagination .page-item.active .page-link {
+            background-color: #2D3A4D; /* Active page background */
+            color: white; /* Active page text color */
+            border-color: #2D3A4D;
+        }
+
+        /* Disabled Page Styling */
+        .pagination .page-item.disabled .page-link {
+            color: #ccc;
+        }
+
+        /* Hover effect for pagination links */
+        .pagination .page-link:hover {
+            background-color:#2D3A4D; /* Hover background */
+            color: white;
+            border-color:#2D3A4D; /* Hover border */
         }
     </style>
-
 @endsection
+
 @section('content')
-    <div class="dictionary-container">
-        <h2>📖 Dictionary App</h2>
-        <div class="form-group">
-            <label for="searchWord" class="font-weight-bold">Enter a word</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="searchWord" placeholder="Type a word here...">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" id="searchBtn">Search</button>
-                </div>
+    <div class="container mt-4">
+        <h2>Từ điển</h2>
+        
+        <!-- Single Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="searchBar" placeholder="Search by Japanese, Vietnamese, or Furigana">
             </div>
         </div>
 
-        <!-- Search History -->
-        <div class="search-history">
-            <h5 class="font-weight-bold mt-4">🔍 Search History</h5>
-            <ul id="historyList" class="list-group">
-                <!-- History items will appear here dynamically -->
-            </ul>
+        <!-- Từ điển -->
+        <div class="row">
+            @foreach ($words as $word)
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Check if there is furigana -->
+                            <h5 class="card-title">
+                                @if ($word->furigana)
+                                    <span class="word-ja">{{ $word->ja }}</span><small class="text-muted">({{ $word->furigana }})</small>
+                                @else
+                                    <span class="word-ja">{{ $word->ja }}</span>
+                                @endif
+                            </h5>
+                            <p class="card-text">{{ $word->vie }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item {{ $words->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $words->previousPageUrl() }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Page Number Links -->
+                    @foreach ($words->getUrlRange(1, $words->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $words->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+
+                    <!-- Next Page Link -->
+                    <li class="page-item {{ $words->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $words->nextPageUrl() }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection
+
