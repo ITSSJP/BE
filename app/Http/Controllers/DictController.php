@@ -24,7 +24,6 @@ class DictController extends Controller
     public function search(Request $request): JsonResponse
     {
         $query = $request->input('q'); 
-
         if (!$query) {
             $words = DictionaryWord::paginate(20);
             return response()->json($words);
@@ -34,16 +33,6 @@ class DictController extends Controller
             ->orWhere('vie', 'like', '%' . $query . '%')
             ->orWhere('furigana', 'like', '%' . $query . '%')
             ->paginate(20);
-        if (!$results) {
-            return response()->json(
-                [
-                    "message" => "Word hasnt added yet",
-                    "date" => [],
-                ]
-                );
-        }
-        $words = $results->paginate(20);
-
-        return response()->json($words);
+        return response()->json($results);
     }
 }
