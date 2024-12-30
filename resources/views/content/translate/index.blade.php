@@ -248,7 +248,6 @@
                 },
                 success: function(data) {
                     if (data.success) {
-
                         $("#output-text").val(data.translated_text);
                     } else {
                         alert("Dịch thất bại: " + data.message);

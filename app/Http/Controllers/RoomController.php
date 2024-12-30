@@ -92,7 +92,7 @@ class RoomController extends Controller
     public function searchUser(Request $request){
         $query = $request->input('user_name');
         $users = User::where('name', 'LIKE', '%' . $query . '%')
-            ->where('id', '!=', Auth::id())
+            ->where('id', '!=', Auth::id())->where('role',User::STUDENT)
             ->get();
 
         // Kiểm tra nếu không tìm thấy người dùng
@@ -155,5 +155,23 @@ class RoomController extends Controller
 
             'message' => 'Thành viên đã được xóa khỏi phòng thành công.'
         ], 200);
+    }
+
+    public function deleteRoom($roomId)
+    {
+        // Lấy lớp học theo ID
+        $room = Room::find($roomId);
+        if (!$room) {
+            return response()->json(['message' => 'Không tồn tại lớp học'], 404);  // Nếu lớp học không tồn tại
+        }
+        // Hủy phòng học
+        try {
+            $room->delete();
+
+            return response()->json(['message' => 'Phòng học đã bị xóa'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error deleting room', 'error' => $e->getMessage()], 500);
+        }
     }
 }

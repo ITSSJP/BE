@@ -74,6 +74,7 @@ class LessonController extends Controller
         ], 200);
     }
     public function showLesson($roomId, $lessonId){
+
         return view('content.lesson.lesson',['lessonId'=>$lessonId,'roomId'=> $roomId]);
     }
     public function getFlashCardItems($roomId, $lessonId){
