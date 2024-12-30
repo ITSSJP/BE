@@ -162,6 +162,8 @@
                         @endif
                         @if(Auth::user()->role==\App\Models\User::TEACHER)
                             <a href="{{route('room.detail',["id"=>$room->id])}}" class="btn btn-primary mt-3">Xem chi tiết lớp học</a>
+                            <a href="#" class="btn btn-danger mt-3" onclick="deleteClass({{$room->id}})">xóa lớp học</a>
+
                         @endif
                     </div>
                 </div>
@@ -232,6 +234,28 @@
                 });
             });
         });
+        async function deleteClass(classId) {
+            const confirmDelete = confirm("Bạn có chắc chắn muốn xóa lớp học này?");
+            if (!confirmDelete) return;
+
+            try {
+                const url = `{{ route('room.delete', ['roomId' => ':roomId']) }}`.replace(':roomId', classId);
+                const response = await fetch(url, {
+                    method: "DELETE",
+                });
+
+                if (response.ok) {
+                    toastr.success("Xóa lớp học thành công.");
+                    location.href="{{route('room.index')}}";
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.message || "Có lỗi xảy ra khi xóa lớp học.");
+                }
+            } catch (error) {
+                console.error("Error deleting class:", error);
+                alert("Có lỗi xảy ra khi xóa lớp học.");
+            }
+        }
     </script>
 
 @endsection

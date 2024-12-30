@@ -188,7 +188,7 @@
                 <hr>
                 <form action="{{route('test.create',['id'=>$roomId,'lessonId'=>$lessonId])}}" method="GET">
                 <h4>Chọn số câu hỏi:</h4>
-                <input id="question-count" type="number" min="1" max="40" value="10" class="form-control" name="number_question"
+                <input id="question-count" type="number" min="1" max="40" value="Ơ" class="form-control" name="number_question"
                        style="width: 80%; margin: 10px auto;" />
                 <button class="btn btn-primary" onclick="applyQuestionCount()">Xác nhận</button>
                 <button class="btn btn-danger" onclick="closeModal()">Đóng</button>

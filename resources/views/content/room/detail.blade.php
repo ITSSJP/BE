@@ -286,9 +286,11 @@
           <td>${index + 1}</td>
           <td>${member.name}</td>
           <td>${member.username}</td>
+            @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Models\User::TEACHER)
                           <td>
                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(${member.id})">❌</button>
                 </td>
+              @endif
         </tr>
       `).join("");
                 },
