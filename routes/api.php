@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestController;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,3 +31,8 @@ Route::delete('rooms/{roomId}/students', [RoomController::class, 'removeStudentF
 Route::put('rooms/{roomId}', [RoomController::class, 'updateRoomName']); // Thay đổi tên phòng học
 Route::delete('rooms/{roomId}', [RoomController::class, 'deleteRoom']); // Hủy phòng học
 Route::post('create-test', [TestController::class, 'createTest']); // API tạo bài test
+Route::get('user/{userId}/admin-rooms', [RoomController::class, 'getUserAdminRooms']);
+Route::get('user/{userId}/joined-rooms', [RoomController::class, 'getUserJoinedRooms']);
+Route::get('/user-id', function () {
+    return response()->json(['userId' => auth()->id()]);
+});

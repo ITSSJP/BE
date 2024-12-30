@@ -9,6 +9,52 @@ use Illuminate\Support\Facades\Validator;
 class RoomController extends Controller
 {   
     /* 
+        input: user_id
+        output: danh sách các lớp học mà user_id là owner
+    */
+    public function getUserAdminRooms($userId)
+    {
+        try {
+            // Lấy danh sách lớp học do user là owner, cùng với số lượng thành viên
+            $rooms = Room::withCount('members') // Đếm số lượng thành viên trong mỗi phòng
+                ->where('owner_id', $userId)
+                ->get(['id', 'name', 'members_count']); // members_count là số lượng thành viên
+            
+            return response()->json([
+                'message' => 'User admin rooms retrieved successfully',
+                'rooms' => $rooms,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error retrieving user admin rooms', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    /* 
+        input: user_id
+        output: danh sách các lớp học mà user_id là thành viên
+    */
+    public function getUserJoinedRooms($userId)
+    {
+        try {
+            // Lấy danh sách các lớp mà user tham gia, cùng với số lượng thành viên
+            $rooms = Room::withCount('members') // Đếm số lượng thành viên trong mỗi phòng
+                ->whereHas('members', function ($query) use ($userId) {
+                    $query->where('member_id', $userId);
+                })
+                ->get(['id', 'name', 'members_count']); // members_count là số lượng thành viên
+            
+            return response()->json([
+                "message" => "User joined rooms retrieved successfully",
+                "rooms" => $rooms,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => "Error retrieving user joined rooms",
+                "error" => $e->getMessage(),
+            ], 500);
+        }
+    }
+    /* 
         input: name_class, user_id
         output: true => "Room created successfully"
                 false(lop hoc da ton tai) => "Room already exists"
@@ -48,7 +94,7 @@ class RoomController extends Controller
             return response()->json(['message' => 'Error creating room', 'error' => $e->getMessage()], 500);
         }
     }
-    
+
     /**
      * input: user_id
      * output: true => "Đã thêm người dùng vào lớp học"
@@ -198,9 +244,9 @@ class RoomController extends Controller
         }
 
         // Kiểm tra nếu người thực hiện hành động không phải là chủ sở hữu phòng
-        if ($room->owner_id != auth()->id()) {
-            return response()->json(['message' => 'Bạn không có quyền xóa lớp học'], 403);
-        }
+        // if ($room->owner_id != auth()->id()) {
+        //     return response()->json(['message' => 'Bạn không có quyền xóa lớp học'], 403);
+        // }
 
         // Hủy phòng học
         try {

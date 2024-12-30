@@ -18,4 +18,9 @@ class Room extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+    // Mối quan hệ giữa Room và User (members)
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'room_members', 'room_id', 'member_id');
+    }
 }
