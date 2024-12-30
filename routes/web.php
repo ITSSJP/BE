@@ -19,13 +19,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 Auth::routes();
-
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/translate', [TranslateController::class, 'index'])->name('translate.index');
 Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
@@ -53,6 +51,6 @@ Route::group(['prefix'=>'room'],function() {
 Route::get('/search-users', [RoomController::class, 'searchUser'])->name('search.user');
 
 
-Route::get('dict', [DictController::class, 'index'])->name('dictionary.index');  
+Route::get('dict', [DictController::class, 'index'])->name('dictionary.index');
 Route::get('dict/random', [DictController::class, 'getRandomWords']) ->name('dictionary.random');
 Route::get('dict/search', [DictController::class, 'search']) ->name('dictionary.search');
