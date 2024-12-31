@@ -47,7 +47,7 @@ Route::group(['prefix'=>'room'],function() {
     });
 
 
-});
+})->middleware('auth:web');
 Route::get('/search-users', [RoomController::class, 'searchUser'])->name('search.user');
 
 

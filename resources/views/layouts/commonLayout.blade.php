@@ -267,7 +267,9 @@
                 window.location.href = '{{route('login')}}'; // Chuyển hướng đến trang đăng nhập
             },
             error: function(xhr) {
-                // Xử lý lỗi
+                window.location.href = '{{route('login')}}'; // Chuyển hướng đến trang đăng nhập
+                
+                console.log("a");
             }
         });
     }

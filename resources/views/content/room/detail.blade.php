@@ -452,7 +452,7 @@
                     $('#search-results').empty(); // Ẩn kết quả tìm kiếm
                     $('#search-results').css('display','none'); // Ẩn kết quả tìm kiếm
                     $('#member-name').val(''); // Reset ô tìm kiếm
-                    updateMemberTable(response.newMember); // Cập nhật bảng thành viên
+                    location.href='{{route('room.detail',['id'=>$room->id])}}';
                 },
                 error: function () {
                     showErrorMessage(response.message);
