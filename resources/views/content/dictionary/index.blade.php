@@ -140,32 +140,6 @@
         @endforeach
     </div>
 
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center mt-4">
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item {{ $words->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $words->previousPageUrl() }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-
-                <!-- Page Number Links -->
-                @foreach ($words->getUrlRange(1, $words->lastPage()) as $page => $url)
-                    <li class="page-item {{ $page == $words->currentPage() ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                    </li>
-                @endforeach
-
-                <!-- Next Page Link -->
-                <li class="page-item {{ $words->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $words->nextPageUrl() }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

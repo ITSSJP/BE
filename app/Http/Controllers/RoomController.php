@@ -83,7 +83,7 @@ class RoomController extends Controller
                 'member_id' => $request->student_id,
             ]);
 
-            return response()->json(['message' => 'Student added to room successfully', 'success' => true,], 200);
+            return response()->json(['message' => 'Student added to room successfully', 'success' => true], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error adding student', 'error' => $e->getMessage()], 500);
